@@ -1,8 +1,6 @@
 package com.jbcn.social.wall.routes;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.processor.idempotent.MemoryIdempotentRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,12 +17,14 @@ public class TweetsRoute extends RouteBuilder {
                 .onException(Exception.class)
                 .to("log:saveFailed")
                 .end()
+                /**
                 .idempotentConsumer(header("tweet_id"))
                 .messageIdRepository(new MemoryIdempotentRepository()).skipDuplicate(false)
                 .filter(exchangeProperty(Exchange.DUPLICATE_MESSAGE).isEqualTo(true))
                 .to("log:duplicate")
                 .stop()
                 .end()
+                 */
                 .to("bean:tweetRepository?method=save");
     }
 }

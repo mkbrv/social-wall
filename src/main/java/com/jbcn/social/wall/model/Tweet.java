@@ -1,8 +1,5 @@
 package com.jbcn.social.wall.model;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +17,7 @@ public class Tweet {
     private Date createdAt;
     private int favoriteCount;
     private int retweetCount;
+    private boolean retweet;
     private String userHandle;
     private String userName;
     private String userLocation;
@@ -116,8 +114,9 @@ public class Tweet {
         return retweeted;
     }
 
-    public Tweet setRetweeted(Tweet retweeted) {
+    public Tweet setRetweeted(final Tweet retweeted) {
         this.retweeted = retweeted;
+        this.retweet = true;
         return this;
     }
 
@@ -133,6 +132,15 @@ public class Tweet {
     public Tweet addPhoto(final MediaEntity photo) {
         this.photos.add(photo);
         photo.setTweet(this);
+        return this;
+    }
+
+    public boolean isRetweet() {
+        return retweet;
+    }
+
+    public Tweet setRetweet(boolean retweet) {
+        this.retweet = retweet;
         return this;
     }
 

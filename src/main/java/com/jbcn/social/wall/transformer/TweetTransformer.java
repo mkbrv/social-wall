@@ -4,11 +4,9 @@ import com.jbcn.social.wall.model.Tweet;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
-import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 import static java.util.Optional.ofNullable;
 
@@ -16,7 +14,6 @@ import static java.util.Optional.ofNullable;
  * Created by miki on 17/06/17.
  */
 public class TweetTransformer implements Processor {
-
     @Override
     public void process(Exchange exchange) throws Exception {
         final Message message = exchange.getIn();
@@ -40,10 +37,10 @@ public class TweetTransformer implements Processor {
                 .setCreatedAt(status.getCreatedAt())
                 .setFavoriteCount(status.getFavoriteCount())
                 .setRetweetCount(status.getRetweetCount())
-                .setText(status.getText())
+                .setText(sanitizeUTF8MB4(status.getText()))
                 .setProfileImage(status.getUser().getProfileImageURL())
                 .setUserHandle(status.getUser().getScreenName())
-                .setUserName(status.getUser().getName())
+                .setUserName(sanitizeUTF8MB4(status.getUser().getName()))
                 .setUserLocation(status.getUser().getLocation());
 
         ofNullable(status.getRetweetedStatus()).ifPresent(retweeted -> tweet.setRetweeted(fromStatus(retweeted)));
@@ -58,6 +55,17 @@ public class TweetTransformer implements Processor {
                                         .setUrl(mediaEntity.getMediaURL())))
                 );
         return tweet;
+    }
+
+    private String sanitizeUTF8MB4(final String toSanitize) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < toSanitize.length(); i++) {
+            if (!Character.isSurrogate(toSanitize.charAt(i))) {
+                result.append(toSanitize.charAt(i));
+            }
+        }
+
+        return result.toString();
     }
 
 }
