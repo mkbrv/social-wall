@@ -20,7 +20,7 @@ public class TweetTransformer implements Processor {
         if (message.getBody() instanceof Status) {
             final Tweet tweet = fromStatus((Status) message.getBody());
             message.setBody(tweet);
-            message.setHeader("retweet", tweet.getRetweeted() != null);
+            message.setHeader("retweet", tweet.isRetweet());
             message.setHeader("tweet_id", tweet.getId());
         }
     }
@@ -37,10 +37,10 @@ public class TweetTransformer implements Processor {
                 .setCreatedAt(status.getCreatedAt())
                 .setFavoriteCount(status.getFavoriteCount())
                 .setRetweetCount(status.getRetweetCount())
-                .setText(sanitizeUTF8MB4(status.getText()))
-                .setProfileImage(status.getUser().getProfileImageURL())
+                .setText((status.getText()))
+                .setProfileImage(status.getUser().getProfileImageURL().replace("_normal", ""))
                 .setUserHandle(status.getUser().getScreenName())
-                .setUserName(sanitizeUTF8MB4(status.getUser().getName()))
+                .setUserName((status.getUser().getName()))
                 .setUserLocation(status.getUser().getLocation());
 
         ofNullable(status.getRetweetedStatus()).ifPresent(retweeted -> tweet.setRetweeted(fromStatus(retweeted)));
@@ -56,16 +56,4 @@ public class TweetTransformer implements Processor {
                 );
         return tweet;
     }
-
-    private String sanitizeUTF8MB4(final String toSanitize) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < toSanitize.length(); i++) {
-            if (!Character.isSurrogate(toSanitize.charAt(i))) {
-                result.append(toSanitize.charAt(i));
-            }
-        }
-
-        return result.toString();
-    }
-
 }

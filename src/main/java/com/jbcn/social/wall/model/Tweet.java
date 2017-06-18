@@ -12,16 +12,24 @@ import java.util.List;
 public class Tweet {
 
     @Id
+    @Column(length = 100)
     private String id;
+    @Column(length = 150)
     private String text;
     private Date createdAt;
     private int favoriteCount;
     private int retweetCount;
     private boolean retweet;
+    @Column(length = 100)
     private String userHandle;
+    @Column(length = 100)
     private String userName;
+    @Column(length = 100)
     private String userLocation;
+    @Column(length = 100)
     private String profileImage;
+
+    private boolean deleted;
 
     @Transient
     private Tweet retweeted;
@@ -110,10 +118,6 @@ public class Tweet {
         return retweetCount;
     }
 
-    public Tweet getRetweeted() {
-        return retweeted;
-    }
-
     public Tweet setRetweeted(final Tweet retweeted) {
         this.retweeted = retweeted;
         this.retweet = true;
@@ -142,6 +146,15 @@ public class Tweet {
     public Tweet setRetweet(boolean retweet) {
         this.retweet = retweet;
         return this;
+    }
+
+    public Tweet setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+        return this;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
     }
 
     @Override

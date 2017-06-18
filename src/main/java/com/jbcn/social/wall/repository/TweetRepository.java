@@ -13,6 +13,6 @@ import java.util.List;
 @Repository("tweetRepository")
 public interface TweetRepository extends JpaRepository<Tweet, String> {
 
-    List<Tweet> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    List<Tweet> findByDeletedIsFalseOrderByCreatedAtDesc(Pageable pageable);
 
 }

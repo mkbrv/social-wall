@@ -9,8 +9,10 @@ import javax.persistence.*;
 public class MediaEntity {
 
     @Id
+    @Column(length = 100)
     private String id;
 
+    @Column(length = 100)
     private String url;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -33,10 +35,6 @@ public class MediaEntity {
     public MediaEntity setUrl(String url) {
         this.url = url;
         return this;
-    }
-
-    public Tweet getTweet() {
-        return tweet;
     }
 
     public MediaEntity setTweet(Tweet tweet) {
