@@ -30,9 +30,9 @@ public class TwitterStreamRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         initConfiguration();
-        from("twitter:streaming/filter?keywords=" + twitterConfiguration.getKeywords())
+        /*from("twitter:streaming/filter?keywords=" + twitterConfiguration.getKeywords())
                 .process(new TweetTransformer())
                 .log("log:received $simple{in.body}")
-                .to(TweetsRoute.SEDA_ROUTE);
+                .to(TweetsRoute.SEDA_ROUTE);*/
     }
 }

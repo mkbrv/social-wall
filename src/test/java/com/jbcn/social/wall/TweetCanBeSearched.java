@@ -3,7 +3,6 @@ package com.jbcn.social.wall;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.annotation.Resource;
@@ -20,7 +19,6 @@ public class TweetCanBeSearched extends SocialWallApplicationTests {
     CamelContext camelContext;
 
     @Test
-    @Ignore
     public void canSearchTweets() {
         ProducerTemplate template = camelContext.createProducerTemplate();
         Object reply = template.sendBody("direct:" + TWITTER_SEARCH, ExchangePattern.InOut, null);
